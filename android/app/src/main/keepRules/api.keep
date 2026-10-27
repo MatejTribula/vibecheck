@@ -1,0 +1,6 @@
+-keep class dk.sdu.vibecheck.data.remote.ApiResult { *; }
+-keep class dk.sdu.vibecheck.data.remote.RegisterRequest { *; }
+-keep class dk.sdu.vibecheck.data.remote.LoginRequest { *; }
+-keep class dk.sdu.vibecheck.domain.models.User { *; }
+-keep class dk.sdu.vibecheck.domain.models.LoginSession { *; }
+-keep class dk.sdu.vibecheck.domain.models.UserSession { *; }
