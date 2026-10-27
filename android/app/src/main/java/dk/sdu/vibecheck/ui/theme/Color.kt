@@ -199,3 +199,7 @@ val WarmCream = Color(0xFF7D570E)
 val OnWarmCream = Color(0xFFFFFFFF)
 val WarmCreamContainer = Color(0xFFFFDDAE)
 val OnWarmCreamContainer = Color(0xFF614000)
+
+// Join Session component colors
+val JoinInputBackground = Color(0xFFF2E8DC)
+val QrPlaceholderBackground = Color(0xFFD9D9D9)
