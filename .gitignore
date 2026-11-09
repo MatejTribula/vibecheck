@@ -1,6 +1,5 @@
 *.iml
 .gradle/
-/local.properties
 .idea/
 node_modules/
 .DS_Store
@@ -9,6 +8,4 @@ build/
 .externalNativeBuild
 .cxx
 local.properties
-/backend/node_modules
 /backend/serviceAccountKey.json
-/android/.idea
