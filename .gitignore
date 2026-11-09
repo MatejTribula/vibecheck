@@ -1,11 +1,11 @@
 *.iml
-.gradle
-/local.properties
-/.idea
+.gradle/
+.idea/
+node_modules/
 .DS_Store
-/android/build
+build/
 /captures
 .externalNativeBuild
 .cxx
 local.properties
-*/.idea
+/backend/serviceAccountKey.json

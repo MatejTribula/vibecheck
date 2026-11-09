@@ -1,11 +1,15 @@
-const express = require('express');
-const app = express();
+const admin = require('firebase-admin');
+const path = require('path');
+const createApp = require('./app');
 
-app.use(express.json());
+const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH;
+const credential = serviceAccountPath
+  ? admin.cert(require(path.resolve(serviceAccountPath)))
+  : admin.applicationDefault();
 
-app.get('/', (req, res) => {
-  res.send('Backend is running');
-});
+admin.initializeApp({ credential });
+
+const app = createApp();
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
