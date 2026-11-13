@@ -1,8 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.gms.google-services")
+    id("com.google.gms.google-services") apply false
 }
+
+if (file("google-services.json").isFile || file("src/debug/google-services.json").isFile || file("src/release/google-services.json").isFile) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
+val apiBaseUrl = providers.gradleProperty("vibecheckApiBaseUrl").orElse("http://10.0.2.2:3000/")
 
 android {
     namespace = "dk.sdu.vibecheck"
@@ -16,6 +22,7 @@ android {
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
+        resValue("string", "api_base_url", apiBaseUrl.get().trimEnd('/') + "/")
     }
 
     buildTypes {
@@ -32,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        resValues = true
     }
 }
 
@@ -44,6 +52,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
@@ -52,4 +61,6 @@ dependencies {
     //Firebase
     implementation(platform("com.google.firebase:firebase-bom:35.1.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-messaging")
+    implementation("androidx.work:work-runtime-ktx:2.11.2")
 }

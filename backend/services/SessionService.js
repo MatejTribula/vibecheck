@@ -51,6 +51,21 @@ class SessionService {
     return Result.success();
   }
 
+  updateFirebaseRegistration(token, firebaseRegistrationId) {
+    const session = this.validateToken(token);
+    if (session.hasError) {
+      return session;
+    }
+
+    if (typeof firebaseRegistrationId !== 'string' || !firebaseRegistrationId.trim() || firebaseRegistrationId.trim().length > 4096) {
+      return Result.failure(ErrorCode.InvalidRequest, 'Firebase registration is invalid.');
+    }
+
+    this.sessions.updateFirebaseRegistration(session.value.id, firebaseRegistrationId.trim());
+
+    return Result.success();
+  }
+
   hashToken(token) {
     return createHash('sha256').update(token).digest('hex');
   }

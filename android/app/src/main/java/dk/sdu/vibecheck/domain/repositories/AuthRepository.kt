@@ -8,4 +8,6 @@ interface AuthRepository {
     suspend fun register(displayName: String, email: String, password: String): Result<User>
 
     suspend fun login(email: String, password: String, firebaseRegistrationId: String? = null): Result<LoginSession>
+
+    suspend fun requestPasswordReset(email: String): Result<String>
 }

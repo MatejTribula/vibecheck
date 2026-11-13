@@ -3,6 +3,7 @@ package dk.sdu.vibecheck.data.repositories
 import dk.sdu.vibecheck.data.local.storageRequest
 import dk.sdu.vibecheck.data.remote.ApiClient
 import dk.sdu.vibecheck.data.remote.LoginRequest
+import dk.sdu.vibecheck.data.remote.PasswordResetRequest
 import dk.sdu.vibecheck.data.remote.RegisterRequest
 import dk.sdu.vibecheck.domain.models.LoginSession
 import dk.sdu.vibecheck.domain.models.Result
@@ -11,6 +12,12 @@ import dk.sdu.vibecheck.domain.repositories.AuthRepository
 import dk.sdu.vibecheck.domain.repositories.TokenStorage
 
 class AuthRepositoryImpl(private val client: ApiClient, private val tokenStorage: TokenStorage) : AuthRepository {
+    override suspend fun requestPasswordReset(email: String): Result<String> {
+        val result = client.request { client.api.requestPasswordReset(PasswordResetRequest(email.trim())) }
+
+        return Result(value = result.value?.message, errorCode = result.errorCode, message = result.message)
+    }
+
     override suspend fun register(displayName: String, email: String, password: String): Result<User> {
         return client.request { client.api.register(RegisterRequest(displayName, email, password)) }
     }

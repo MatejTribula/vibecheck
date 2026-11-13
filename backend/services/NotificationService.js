@@ -2,10 +2,24 @@ const { applicationDefault, getApps, initializeApp } = require('firebase-admin/a
 const { getMessaging } = require('firebase-admin/messaging');
 const Result = require('../common/Result');
 const ErrorCode = require('../common/ErrorCode');
+const UserSessionRepository = require('../repositories/UserSessionRepository');
 
 class NotificationService {
   constructor(messaging = null) {
     this.messaging = messaging;
+  }
+
+  async sendToUser(userId, title, body, sessions = new UserSessionRepository()) {
+    if (!Number.isSafeInteger(userId) || userId <= 0) {
+      return Result.failure(ErrorCode.InvalidRequest, 'User ID is invalid.');
+    }
+
+    const tokens = sessions.findFirebaseRegistrationsByUserId(userId);
+    if (tokens.length === 0) {
+      return Result.success({ successCount: 0, failureCount: 0, failedDevices: [] });
+    }
+
+    return this.send(tokens, title, body);
   }
 
   async send(tokens, title, body) {

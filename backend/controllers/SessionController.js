@@ -24,6 +24,12 @@ class SessionController {
 
     return match ? match[1] : null;
   }
+
+  updateFirebaseRegistration(req, res) {
+    const result = this.service.updateFirebaseRegistration(this.getToken(req), req.body?.firebaseRegistrationId);
+
+    return sendResult(res, result);
+  }
 }
 
 module.exports = SessionController;

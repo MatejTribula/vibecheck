@@ -18,6 +18,13 @@ class UserSessionRepository {
     return this.toUserSession(this.db.prepare('SELECT * FROM user_sessions WHERE id = ?').get(id));
   }
 
+  findFirebaseRegistrationsByUserId(userId) {
+    return this.db.prepare(`
+      SELECT DISTINCT firebase_registration_id FROM user_sessions
+      WHERE user_id = ? AND firebase_registration_id IS NOT NULL AND julianday(expires_at) > julianday('now')
+    `).all(userId).map(row => row.firebase_registration_id);
+  }
+
   findByTokenHash(tokenHash) {
     return this.toUserSession(this.db.prepare('SELECT * FROM user_sessions WHERE token_hash = ? AND julianday(expires_at) > julianday(\'now\')').get(tokenHash));
   }

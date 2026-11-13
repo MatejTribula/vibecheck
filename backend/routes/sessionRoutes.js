@@ -6,6 +6,7 @@ function sessionRoutes(service) {
   const controller = new SessionController(service);
 
   router.get('/current', (req, res) => controller.validate(req, res));
+  router.put('/current/firebase-registration', (req, res) => controller.updateFirebaseRegistration(req, res));
   router.post('/logout', (req, res) => controller.logout(req, res));
 
   return router;

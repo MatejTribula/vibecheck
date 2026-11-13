@@ -21,6 +21,11 @@ database.exec(`
     expires_at TEXT NOT NULL CHECK(julianday(expires_at) IS NOT NULL AND julianday(expires_at) > julianday(created_at))
   ) STRICT;
   CREATE INDEX IF NOT EXISTS user_sessions_user_id ON user_sessions(user_id);
+  CREATE TABLE IF NOT EXISTS password_resets (
+    user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    token_hash TEXT NOT NULL UNIQUE,
+    expires_at INTEGER NOT NULL
+  ) STRICT;
 `);
 
 module.exports = database;

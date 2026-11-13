@@ -73,6 +73,21 @@ class AuthViewModel(private val authRepository: AuthRepository, private val sess
         }
     }
 
+    fun requestPasswordReset(email: String) {
+        execute {
+            val result = authRepository.requestPasswordReset(email)
+            if (result.hasError) {
+                showError(result)
+
+                return@execute
+            }
+
+            _uiState.update {
+                it.copy(passwordResetMessage = result.value ?: "If an account exists for that email, a reset link will be generated.")
+            }
+        }
+    }
+
     fun logout() {
         execute {
             val result = sessionRepository.logout()
@@ -87,7 +102,7 @@ class AuthViewModel(private val authRepository: AuthRepository, private val sess
     }
 
     fun clearMessages() {
-        _uiState.update { it.copy(errorMessage = null, registrationSuccessful = false) }
+        _uiState.update { it.copy(errorMessage = null, registrationSuccessful = false, passwordResetMessage = null) }
     }
 
     private fun execute(action: suspend () -> Unit) {
@@ -95,7 +110,7 @@ class AuthViewModel(private val authRepository: AuthRepository, private val sess
             return
         }
 
-        _uiState.update { it.copy(isLoading = true, errorMessage = null, registrationSuccessful = false) }
+        _uiState.update { it.copy(isLoading = true, errorMessage = null, registrationSuccessful = false, passwordResetMessage = null) }
 
         currentJob = viewModelScope.launch {
             try {
